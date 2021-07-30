@@ -68,7 +68,7 @@ int main(int argc , char* argv[]){
     }
     GET_TIME(fim);
     delta = fim - inicio;
-    printf("Tempo inicializão: %lf\n",delta);
+    printf("Tempo inicialização: %lf\n",delta);
     
     // alocacao das estruturas das threads e criação de threads
 
@@ -88,7 +88,7 @@ int main(int argc , char* argv[]){
      for(int i = 0 ; i<nthreads ; i++){
            pthread_join(*(tid+i),NULL);
         }
-        
+
     GET_TIME(fim);
     delta = fim - inicio;
     printf("Tempo multiplica: %lf\n",delta);

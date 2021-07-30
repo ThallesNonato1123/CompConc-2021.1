@@ -116,8 +116,8 @@ int main(int argc , char* argv[]){
             fprintf(stderr,"Erro - pthread_create\n");
             return 3;
         }
-        maiormenor.maior = aux->maior;
-        maiormenor.menor = aux->menor;
+        maiores[i] = aux->maior;
+        menores[i] = aux->menor;
     }
     
     float maiorConc = maiores[0];
@@ -130,8 +130,8 @@ int main(int argc , char* argv[]){
         } menorConc = menores[i];    
     }
 
-    printf("Maior Concorrente: %f\n", maiormenor.maior);
-    printf("Menor Concorrente: %f\n" , maiormenor.menor);
+    printf("Maior Concorrente: %f\n", maiorConc);
+    printf("Menor Concorrente: %f\n" , menorConc);
     
     GET_TIME(fim);
     

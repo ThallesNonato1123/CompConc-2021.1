@@ -141,7 +141,6 @@ int main(int argc , char* argv[]){
         printf("Tempo Concorrente: %f\n",delta);
         
         free(vetor);
-        free(args);
         free(maiores);
         free(menores);
         free(tid);

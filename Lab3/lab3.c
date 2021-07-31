@@ -73,7 +73,6 @@ int main(int argc , char* argv[]){
     
     float maior;
     float menor;
-    fluxo maiormenor;
 
     maior = vetor[0];
     menor = vetor[0];
@@ -125,9 +124,7 @@ int main(int argc , char* argv[]){
 
      for(long int i = 0 ; i < nthreads ; i++){
         if(maiores[i] > maiorConc) maiorConc = maiores[i];
-        if(menores[i] < menorConc){
-
-        } menorConc = menores[i];    
+        if(menores[i] < menorConc) menorConc = menores[i];    
     }
 
     printf("Maior Concorrente: %f\n", maiorConc);

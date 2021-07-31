@@ -1,4 +1,4 @@
-# Tomada de tempo Lab 3 CompConc
+# Cálculo de Aceleração Lab 3
 
 Vetor 10^5:
 - 2 threads  

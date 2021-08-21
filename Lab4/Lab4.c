@@ -4,7 +4,6 @@
 
 #define NTHREADS 4 
 int x = 0;
-int y = 0;
 pthread_mutex_t x_mutex;
 pthread_cond_t x_cond;
 

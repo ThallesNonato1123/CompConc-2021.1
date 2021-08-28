@@ -89,4 +89,10 @@ int main(int argc, char* argv[]){
             printf("teste falhou");
     }
     printf("teste passou\n");
+
+    free(vetor);
+    free(resultThread);
+    free(tid);
+    pthread_mutex_destroy(&x_mutex);
+    pthread_cond_destroy(&x_cond);
 }

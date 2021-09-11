@@ -18,46 +18,46 @@ class Monitor {
   } 
   
   // Entrada para leitores
-  public synchronized void EntraLeitor (int id, String tipoString) {
+  public synchronized void EntraLeitor (int id, String tipoThread) {
     try { 
       while (this.escr > 0) {
       //if (this.escr > 0) {
-         System.out.println ( tipoString + ".leitorBloqueado("+id+")" +  " valor atual:" + dadoGlobal.dado);
+         System.out.println ( tipoThread + ".leitorBloqueado("+id+")" +  " valor atual:" + dadoGlobal.dado);
          wait();  //bloqueia pela condicao logica da aplicacao 
       }
       
        this.leit++;  //registra que ha mais um leitor lendo
-      System.out.println (tipoString + ".leitorLendo("+id+")" + " valor atual: " + dadoGlobal.dado);
+      System.out.println (tipoThread + ".leitorLendo("+id+")" + " valor atual: " + dadoGlobal.dado);
 
   } catch (InterruptedException e) { }
   }
   
   // Saida para leitores
-  public synchronized void SaiLeitor (int id, String tipoString) {
+  public synchronized void SaiLeitor (int id, String tipoThread) {
      this.leit--; //registra que um leitor saiu
      if (this.leit == 0) 
            this.notify(); //libera escritor (caso exista escritor bloqueado)
-     System.out.println (tipoString + ".leitorSaindo("+id+")" + " valor atual: " + dadoGlobal.dado);
+     System.out.println (tipoThread + ".leitorSaindo("+id+")" + " valor atual: " + dadoGlobal.dado);
   }
   
   // Entrada para escritores
-  public synchronized void EntraEscritor (int id, String tipoString) {
+  public synchronized void EntraEscritor (int id, String tipoThread) {
     try { 
       //while ((this.leit > 0) || (this.escr > 0)) {
       while ((this.leit > 0) || (this.escr > 0)) {
-         System.out.println (tipoString + ".escritorBloqueado("+id+")" +  " valor atual: " + dadoGlobal.dado);
+         System.out.println (tipoThread + ".escritorBloqueado("+id+")" +  " valor atual: " + dadoGlobal.dado);
          wait();  //bloqueia pela condicao logica da aplicacao 
       }
       this.escr++; //registra que ha um escritor escrevendo
-      System.out.println (tipoString + ".escritorEscrevendo("+id+")" + " contéudo anterior:" + dadoGlobal.dado);
+      System.out.println (tipoThread + ".escritorEscrevendo("+id+")" + " contéudo anterior:" + dadoGlobal.dado);
     } catch (InterruptedException e) { }
   }
   
   // Saida para escritores
-  public synchronized void SaiEscritor (int id, String tipoString) {
+  public synchronized void SaiEscritor (int id, String tipoThread) {
      this.escr--; //registra que o escritor saiu
      notifyAll(); //libera leitores e escritores (caso existam leitores ou escritores bloqueados)
-     System.out.println (tipoString + ".escritorSaindo("+id+") com novo dado após escrita: " + dadoGlobal.dado);
+     System.out.println (tipoThread + ".escritorSaindo("+id+") com novo dado após escrita: " + dadoGlobal.dado);
   }
 }
 

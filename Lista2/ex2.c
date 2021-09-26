@@ -25,15 +25,18 @@ void* T1(void* arg) {
 
 void* T2(void* arg) {
 
-    pthread_mutex_lock(&mutex_x);
-    pthread_cond_wait(&condX, &mutex_x); // bloqueando a thread na fila da variável de condição, esperando receber o sinal que será dado quando for um multiplo de 100 
-   // sem esse wait, casos como contador = 0 passaram, justamente por t2 começar em alguns casos primeiro que T1.
-    while (contador%100 != 0) {  //  para o caso de T2 ser sinalizada e antes de retornar a execucao o valor do contador mudar
-        pthread_cond_wait(&condX, &mutex_x); // fica em espera
+    pthread_mutex_lock(&mutex_x); // inicio do lock
+    // bloqueando a thread na fila da variável de condição, esperando receber o sinal que será dado quando for um multiplo de 100 
+    while(contador %100 != 0){ // para o caso de T2 ser sinalizada e antes de retornar a execucao o valor do contador mudar // fica em espera
+        pthread_cond_wait(&condX, &mutex_x);
     }
-    printf("Multiplo de 100 encontrado: %d\n", contador);
-    exit(1);
-    pthread_mutex_unlock(&mutex_x);
+    
+    while (1) {  //  loop infinito para pegar os multiplos de 100
+    if(contador % 100 == 0){ // condição para pegar os multiplos de 100
+    printf("Multiplo de 100 encontrado: %d\n", contador); // print
+    }
+    pthread_mutex_unlock(&mutex_x); // fim do lock
+}
 }
 
 int main(int argc, char* argv[]) {

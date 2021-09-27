@@ -43,8 +43,8 @@ void* T2(void* arg) {
             printf("multiplo de 100 %lld\n", contador);
         }
         vez = true; // seta o sinal para t1
-        pthread_mutex_unlock(&mutex_x); // unlock
         pthread_cond_signal(&condX); // da sinal para  T1
+        pthread_mutex_unlock(&mutex_x); // unlock
     }
     pthread_exit(NULL);
 }

@@ -8,7 +8,7 @@ pthread_cond_t condX, condY;
 long long int contador = 0, vez = true;  // contador global e variavel vez, funciona com uma ideia próxima a do algoritmo da ultima questão da lista 1
 // quando a variavel vez = true, significa que t1 tem que rodar, quando vez = false, significa que t2 tem q rodar
 
-void fazAlgo(int x){ // função faz algo, mesma função que os laboratórios anteriores
+void fazAlgo(int x){ // função faz algo, mesma função dos laboratórios anteriores
   int boba1, boba2;
   boba1=100; boba2=-100; while (boba2 < boba1) boba2++;
 }

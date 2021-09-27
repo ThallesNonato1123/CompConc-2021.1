@@ -1,10 +1,12 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 pthread_mutex_t mutex_x;
-pthread_cond_t condX;
-int contador = 0; // contador global 
+pthread_cond_t condX, condY;
+long long int contador = 0, vez = true;  // contador global e variavel vez, funciona com uma ideia próxima a do algoritmo da ultima questão da lista 1
+// quando a variavel vez = true, significa que t1 tem que rodar, quando vez = false, significa que t2 tem q rodar
 
 void fazAlgo(int x){ // função faz algo, mesma função que os laboratórios anteriores
   int boba1, boba2;
@@ -12,31 +14,39 @@ void fazAlgo(int x){ // função faz algo, mesma função que os laboratórios a
 }
 
 void* T1(void* arg) {
-    while(1) { // loop while para incrementar o contador
-        pthread_mutex_lock(&mutex_x); // lock 
-        fazAlgo(contador); // chamada da função
-        if(contador %100 == 0){
-          pthread_cond_signal(&condX); // quando o numero do contador for divisivel por 100, é enviado um sinal para a segunda thread que estava aguardando, ser excutada
+    while(1) {
+        pthread_mutex_lock(&mutex_x); //lock
+        
+        if (vez == false) { // Vez = false, significa que t1 tem que esperar o sinal de t2
+            pthread_cond_wait(&condX, &mutex_x);
         }
-        contador++; // incremento
-        pthread_mutex_unlock(&mutex_x); // 
+        fazAlgo(contador);
+        contador++;
+        vez = false; // seta o estado para a próxima thread
+        
+        pthread_mutex_unlock(&mutex_x); // unlock
+        pthread_cond_signal(&condY); // seta o sinal para  T2
     }
+    pthread_exit(NULL);
 }
 
+// thread que verifica se 'contador' é um múltiplo de 100
 void* T2(void* arg) {
+    while(1) {
+        pthread_mutex_lock(&mutex_x); // lock
+        
+        if (vez == true) { // Vez = true, significa que t1 tem que esperar o sinal de t2
+            pthread_cond_wait(&condY, &mutex_x);
+        }
 
-    pthread_mutex_lock(&mutex_x); // inicio do lock
-    // bloqueando a thread na fila da variável de condição, esperando receber o sinal que será dado quando for um multiplo de 100 
-    while(contador %100 != 0){ // para o caso de T2 ser sinalizada e antes de retornar a execucao o valor do contador mudar // fica em espera
-        pthread_cond_wait(&condX, &mutex_x);
+        if (contador % 100 == 0) { // print do contador para multiplos de 100
+            printf("multiplo de 100 %lld\n", contador);
+        }
+        vez = true; // seta o sinal para t1
+        pthread_mutex_unlock(&mutex_x); // unlock
+        pthread_cond_signal(&condX); // da sinal para  T1
     }
-    
-    while (1) {  //  loop infinito para pegar os multiplos de 100
-    if(contador % 100 == 0){ // condição para pegar os multiplos de 100
-    printf("Multiplo de 100 encontrado: %d\n", contador); // print
-    }
-    pthread_mutex_unlock(&mutex_x); // fim do lock
-}
+    pthread_exit(NULL);
 }
 
 int main(int argc, char* argv[]) {
@@ -44,6 +54,7 @@ int main(int argc, char* argv[]) {
     
     // inicializa o mutex (lock de exclusão mutua) e a variavel de condição
     pthread_mutex_init(&mutex_x, NULL);
+    pthread_cond_init(&condY, NULL);
     pthread_cond_init(&condX, NULL);
     // cria as threads
     pthread_create(&threads[0], NULL, T1, NULL);
@@ -57,5 +68,6 @@ int main(int argc, char* argv[]) {
     //desaloca variáveis e termina
     pthread_mutex_destroy(&mutex_x);
     pthread_cond_destroy(&condX);
+    pthread_cond_destroy(&condY);
     return 0;
 }

@@ -22,8 +22,8 @@ void *T1(void *t){
 
 void *T2(void *t){
     
-    sem_post(&t2_sem);
     printf("Seja bem-vindo\n");
+    sem_post(&t2_sem);
     pthread_exit(NULL);
 }
 
@@ -32,8 +32,6 @@ void *T3(void *t){
     sem_wait(&t4_sem);
     sem_wait(&t1_sem);
     printf("Volte sempre!\n");
-    sem_post(&t4_sem);
-    sem_post(&t1_sem);
     pthread_exit(NULL);
 }
 
